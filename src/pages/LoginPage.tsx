@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { supabase } from '../lib/supabase';
+import { supabase, isSupabaseConfigured } from '../lib/supabase';
 import { motion } from 'motion/react';
-import { LogIn, Mail, Lock, AlertCircle } from 'lucide-react';
+import { LogIn, Mail, Lock, AlertCircle, Settings } from 'lucide-react';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
@@ -13,6 +13,12 @@ export default function LoginPage() {
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    if (!isSupabaseConfigured) {
+      setError('Konfigurasi Supabase belum diset. Silakan masukkan VITE_SUPABASE_URL dan VITE_SUPABASE_ANON_KEY di Project Settings.');
+      return;
+    }
+
     setLoading(true);
     setError(null);
 
@@ -33,6 +39,12 @@ export default function LoginPage() {
 
   const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (!isSupabaseConfigured) {
+      setError('Konfigurasi Supabase belum diset. Silakan masukkan VITE_SUPABASE_URL dan VITE_SUPABASE_ANON_KEY di Project Settings.');
+      return;
+    }
+
     setLoading(true);
     setError(null);
 
@@ -96,6 +108,22 @@ export default function LoginPage() {
             <h3 className="text-3xl font-black mb-2 text-gray-900">Selamat Datang</h3>
             <p className="text-gray-500">Silakan masuk menggunakan kredensial Anda.</p>
           </div>
+
+          {!isSupabaseConfigured && (
+            <div className="mb-6 p-6 bg-amber-50 border-2 border-dashed border-amber-200 rounded-[32px] text-amber-700">
+              <div className="flex items-center gap-3 mb-3">
+                <Settings className="animate-spin-slow" size={24} />
+                <h4 className="font-black text-sm uppercase tracking-widest">Setup Required</h4>
+              </div>
+              <p className="text-xs font-medium leading-relaxed mb-4">
+                Aplikasi belum terhubung ke Supabase. Silakan buka <b>Project Settings</b> dan tambahkan:
+              </p>
+              <ul className="text-[10px] font-mono bg-white/50 p-3 rounded-xl space-y-1 border border-amber-100">
+                <li>VITE_SUPABASE_URL</li>
+                <li>VITE_SUPABASE_ANON_KEY</li>
+              </ul>
+            </div>
+          )}
 
           <form onSubmit={handleLogin} className="space-y-4">
             {error && (

@@ -6,6 +6,7 @@
   --color-primary: #dc2626; /* Red-600 */
   --color-primary-light: #fef2f2; /* Red-50 */
   --color-primary-dark: #991b1b; /* Red-800 */
+  --animate-spin-slow: spin 3s linear infinite;
 }
 
 @layer base {
