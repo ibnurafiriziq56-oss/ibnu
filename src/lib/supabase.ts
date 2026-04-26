@@ -1,17 +1,21 @@
 import { createClient } from '@supabase/supabase-js';
 
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || '';
+const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || '';
 
-export const isSupabaseConfigured = !!supabaseUrl && !!supabaseAnonKey && supabaseUrl !== 'https://placeholder.supabase.co';
+// Validasi apakah key adalah placeholder atau kosong
+const isValidUrl = supabaseUrl.startsWith('https://') && !supabaseUrl.includes('placeholder');
+const isValidKey = supabaseAnonKey.length > 20 && supabaseAnonKey !== 'placeholder';
+
+export const isSupabaseConfigured = isValidUrl && isValidKey;
 
 if (!isSupabaseConfigured) {
-  console.warn('Supabase credentials missing. Please add VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY to your secrets.');
+  console.error('Supabase Configuration Error: VITE_SUPABASE_URL or VITE_SUPABASE_ANON_KEY is invalid or missing.');
 }
 
 export const supabase = createClient(
-  supabaseUrl || 'https://placeholder.supabase.co',
-  supabaseAnonKey || 'placeholder'
+  isValidUrl ? supabaseUrl : 'https://placeholder-fix.supabase.co',
+  isValidKey ? supabaseAnonKey : 'no-key-provided'
 );
 
 export type Role = 'admin' | 'teacher' | 'student';
