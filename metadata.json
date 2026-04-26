@@ -1,0 +1,6 @@
+{
+  "name": "SMK Prima Unggul Exam Portal",
+  "description": "A comprehensive online examination system for SMK Prima Unggul students and teachers, built with React and Supabase.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["auth", "database"]
+}
